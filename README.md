@@ -49,11 +49,42 @@ To open phpMyAdmin (MySQL): **http://localhost/phpmyadmin**
 
 ---
 
+## Control XAMPP with simple commands
+
+After installing, open PowerShell (or Command Prompt) and type one of these:
+
+| Type this | What it does |
+|---|---|
+| `xampp start` | Starts Apache and MySQL |
+| `xampp stop` | Stops Apache and MySQL |
+| `xampp restart` | Stops, then starts both again |
+| `xampp status` | Shows what is running and what is not |
+| `xampp fix` | Repairs common problems, then restarts everything |
+| `xampp uninstall` | Removes auto-start and the `xampp` command |
+
+To act on just one service, add `apache` or `mysql`:
+
+```powershell
+xampp restart mysql
+xampp stop apache
+```
+
+### What does `xampp fix` do?
+
+1. Closes any frozen or leftover Apache and MySQL processes.
+2. Deletes the stale lock files MySQL leaves behind after a crash.
+3. Checks whether another program is blocking Apache's or MySQL's port. If it finds one, it tells you which program and asks if you want to close it.
+4. Starts Apache and MySQL again and shows the result.
+
+> If `xampp` is not recognized right after installing, close PowerShell and open a new window.
+
+---
+
 ## What does the installer do?
 
 1. Finds your XAMPP folder (or asks you to type it if it can't find it).
-2. Saves a small start script in `%LOCALAPPDATA%\XamppAutoStart`.
-3. Creates a Windows Scheduled Task called **Start XAMPP** that runs the script when you:
+2. Saves the `xampp` command in `%LOCALAPPDATA%\XamppAutoStart` and adds that folder to your PATH, so you can type `xampp` anywhere.
+3. Creates a Windows Scheduled Task called **Start XAMPP** that runs `xampp start` when you:
    - sign in to Windows, or
    - unlock your laptop.
 4. Starts Apache and MySQL right away.
@@ -64,13 +95,13 @@ The script skips any service that is already running, so nothing gets started tw
 
 ## Uninstall
 
-Open PowerShell, paste this, and press Enter:
+Open PowerShell, type this, and press Enter:
 
 ```powershell
-Unregister-ScheduledTask -TaskName 'Start XAMPP' -Confirm:$false; Remove-Item "$env:LOCALAPPDATA\XamppAutoStart" -Recurse -Force
+xampp uninstall
 ```
 
-Apache and MySQL will no longer start automatically. Your XAMPP files and databases are not touched.
+Apache and MySQL will no longer start automatically, and the `xampp` command is removed. Your XAMPP files and databases are not touched.
 
 ---
 
@@ -83,7 +114,10 @@ Apache and MySQL will no longer start automatically. Your XAMPP files and databa
 | **Red error about scripts being disabled** | Run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`, answer **Y**, then try again. |
 | **http://localhost doesn't open** | Another program may be using port 80 (such as IIS, Skype, or another web server). Close it, or change Apache's port in XAMPP's `httpd.conf`. |
 | **MySQL won't start** | Another MySQL may be using port 3306. Stop it, or change the port in XAMPP's `my.ini`. |
-| **Apache or MySQL still stopped after sign-in** | Open **Task Scheduler**, find **Start XAMPP**, right-click it and choose **Run**. Check the "Last Run Result" column. |
+| **Apache or MySQL stopped after sign-in** | Type `xampp fix`. It cleans up leftovers, finds anything blocking the ports, and restarts both. |
+| **Not sure what's running** | Type `xampp status`. |
+| **`xampp` is not recognized** | Close PowerShell and open a new window. If it still fails, run the install command again. |
+| **MySQL still won't start after `xampp fix`** | Check the log at `C:\xampp\mysql\data\mysql_error.log` (adjust the path if XAMPP is elsewhere). |
 
 ---
 
