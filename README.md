@@ -22,7 +22,7 @@ Click the **Start** button, type `PowerShell`, and press **Enter**.
 **2. Copy this line, paste it into the PowerShell window, and press Enter**
 
 ```powershell
-iwr -useb https://raw.githubusercontent.com/YOUR-USER/YOUR-REPO/main/setup-xampp.ps1 | iex
+iwr -useb https://raw.githubusercontent.com/the-kimbe/xscript/main/setup-xampp.ps1 | iex
 ```
 
 > To paste in PowerShell, **right-click** inside the window.
